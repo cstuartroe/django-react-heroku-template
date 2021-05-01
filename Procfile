@@ -1,0 +1,1 @@
+web: gunicorn django_react_heroku_template.wsgi
