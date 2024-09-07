@@ -71,15 +71,24 @@ WSGI_APPLICATION = 'django_react_heroku_template.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+DEV_SQLITE = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': "db.sqlite3",
+}
+
+PROD_PG = {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': os.getenv("PG_DB"),
+    'USER': os.getenv("PG_USER"),
+    'PASSWORD': os.getenv("PG_PASSWORD"),
+    'HOST': os.getenv("PG_HOST"),
+    'PORT': '5432',
+}
+
+USE_DEV = bool(os.getenv("USE_DEV"))
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv("PG_DB"),
-        'USER': os.getenv("PG_USER"),
-        'PASSWORD': os.getenv("PG_PASSWORD"),
-        'HOST': os.getenv("PG_HOST"),
-        'PORT': '5432',
-    }
+    'default': DEV_SQLITE if USE_DEV else PROD_PG
 }
 
 
