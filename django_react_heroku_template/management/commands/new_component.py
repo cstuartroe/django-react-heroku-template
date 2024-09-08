@@ -1,27 +1,26 @@
+import os.path
+
 from django.core.management.base import BaseCommand
 
-CONTENTS = """import React, { Component } from "react";
+CONTENTS = """import React, {Component} from "react";
 
-type Props = {
-}
+type Props = {}
 
-type State = {
-}
+type State = {}
 
 export default class %s extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-    };
-  }
+    constructor(props: Props) {
+        super(props);
+        this.state = {};
+    }
 
 
-  render() {
-    return (
-      <>
-      </>
-    );
-  }
+    render() {
+        return (
+            <>
+            </>
+        );
+    }
 }
 """
 
@@ -34,7 +33,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, component_names, **options):
         for name in component_names:
-            with open(f"src/{name}.tsx", "w") as fh:
+            filepath = f"src/{name}.tsx"
+
+            if os.path.exists(filepath):
+                raise ValueError("That component already exists.")
+
+            with open(filepath, "w") as fh:
                 fh.write(CONTENTS % name)
-
-
